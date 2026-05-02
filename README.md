@@ -120,7 +120,9 @@ These were captured on a local machine (Apple M2, Docker, PostgreSQL 16).
 
 ### 1. Selectivity determines whether an index gets used
 The B-Tree age range query returned ~190k rows (19% of the table) and got only
-a 1.1x speedup. Postgres deliberately ignored the index because sequential
+a 1.1x speedup. Postgres uses the index to fetch 190k rows, which means it needs 
+to follow 190k heap pointers, each potentially on a different disk space. 
+Postgres deliberately ignored the index because sequential
 reads are faster than 190k random disk jumps. Indexes only help when a query
 is highly selective — fetching a small fraction of total rows.
 
