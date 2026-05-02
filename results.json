@@ -1,0 +1,62 @@
+[
+  {
+    "name": "1. Hash Index \u2014 exact email lookup",
+    "without_ms": 15.569,
+    "with_ms": 0.018,
+    "speedup": 864.9,
+    "without_plan": "Seq Scan",
+    "with_plan": "Index Scan",
+    "index_sql": "CREATE INDEX idx_email_hash ON users USING HASH (email);",
+    "query_sql": "SELECT * FROM users WHERE email = 'jennifer97@example.net';"
+  },
+  {
+    "name": "2. B-Tree \u2014 age range query",
+    "without_ms": 36.444,
+    "with_ms": 33.941,
+    "speedup": 1.1,
+    "without_plan": "Seq Scan",
+    "with_plan": "Bitmap Heap Scan",
+    "index_sql": "CREATE INDEX idx_age_btree ON users (age);",
+    "query_sql": "SELECT * FROM users WHERE age BETWEEN 25 AND 35;"
+  },
+  {
+    "name": "3. Composite Index \u2014 city + age filter",
+    "without_ms": 19.898,
+    "with_ms": 6.554,
+    "speedup": 3.0,
+    "without_plan": "Bitmap Heap Scan",
+    "with_plan": "Bitmap Heap Scan",
+    "index_sql": "CREATE INDEX idx_city_age_composite ON users (city, age);",
+    "query_sql": "SELECT * FROM users WHERE city = 'Bangalore' AND age < 30;"
+  },
+  {
+    "name": "4. Partial Index \u2014 active users by city",
+    "without_ms": 18.078,
+    "with_ms": 12.643,
+    "speedup": 1.4,
+    "without_plan": "Bitmap Heap Scan",
+    "with_plan": "Bitmap Heap Scan",
+    "index_sql": "CREATE INDEX idx_active_partial ON users (city) WHERE status = 'active';",
+    "query_sql": "SELECT * FROM users WHERE city = 'Mumbai' AND status = 'active';"
+  },
+  {
+    "name": "5. Covering Index \u2014 salary lookup by city",
+    "without_ms": 19.16,
+    "with_ms": 11.166,
+    "speedup": 1.7,
+    "without_plan": "Bitmap Heap Scan",
+    "with_plan": "Index Only Scan",
+    "index_sql": "CREATE INDEX idx_covering ON users (city) INCLUDE (salary, age);",
+    "query_sql": "SELECT city, salary, age FROM users WHERE city = 'Delhi';"
+  },
+  {
+    "name": "6. B-Tree \u2014 date range + ORDER BY",
+    "without_ms": 18.258,
+    "with_ms": 0.07,
+    "speedup": 260.8,
+    "without_plan": "Seq Scan",
+    "with_plan": "Index Scan",
+    "index_sql": "CREATE INDEX idx_created_at ON users (created_at);",
+    "query_sql": "SELECT * FROM users\n                   WHERE created_at BETWEEN '2022-01-01' AND '2022-12-31'\n                   ORDER BY created_at LIMIT 100;"
+  }
+]
