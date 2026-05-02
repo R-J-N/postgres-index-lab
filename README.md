@@ -16,6 +16,8 @@ strategies affect query performance at scale. All benchmarks run against a
 | B-Tree + LIMIT   | Date range + ORDER BY + early exit   |
 
 ## Project structure
+
+```
 postgres-index-lab/
 ├── schema.py       # creates the users table
 ├── generate.py     # inserts 1M rows using Faker
@@ -23,6 +25,7 @@ postgres-index-lab/
 ├── report.py       # prints results with explanations to terminal
 ├── results.json    # captured benchmark output
 └── .gitignore
+```
 
 ## Dataset
 
