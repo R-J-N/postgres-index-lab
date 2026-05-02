@@ -103,7 +103,6 @@ Each benchmark follows the same pattern:
 ## Results
 
 These were captured on a local machine (Apple M2, Docker, PostgreSQL 16).
-Your numbers will vary but the relative patterns should hold.
 
 | Index type              | Without index | With index | Speedup | Scan type (with)  |
 |-------------------------|---------------|------------|---------|-------------------|
